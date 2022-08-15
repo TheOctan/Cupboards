@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityExtensions;
+using UnityExtensions.Math;
 
 namespace OctanGames.Map
 {
@@ -9,23 +10,28 @@ namespace OctanGames.Map
     {
         public event Action<Vector2Int> OnGridObjectChanged;
 
+        private Transform _transform;
+
         private readonly Vector3 _originPosition;
         private readonly T[,] _gridArray;
+        private readonly TextMeshPro[,] _debugTextArray;
 
         public bool ShowDebug { get; set; } = true;
         public int Width { get; }
         public int Height { get; }
         public float CellSize { get; }
 
-        public CellsGrid(int width, int height, float cellSize, Vector3 originPosition,
-            Func<CellsGrid<T>, int, int, T> createGridObject)
+        public CellsGrid(Transform transform, int width, int height, float cellSize,
+            Vector3 originPosition, Func<CellsGrid<T>, int, int, T> createGridObject)
         {
             Width = width;
             Height = height;
             CellSize = cellSize;
             _originPosition = originPosition;
+            _transform = transform;
 
             _gridArray = new T[width, height];
+            _debugTextArray = new TextMeshPro[width, height];
 
             for (var x = 0; x < _gridArray.GetLength(0); x++)
             {
@@ -37,44 +43,53 @@ namespace OctanGames.Map
 
             if (ShowDebug)
             {
-                DrawDebug(width, height, cellSize);
+                AddDebugText(width, height, cellSize);
             }
         }
 
-        private void DrawDebug(int width, int height, float cellSize)
+        public void SetDebugText(int x, int y, Color color)
         {
-            var debugTextArray = new TextMeshPro[width, height];
+            _debugTextArray[x, y].color = color;
+        }
 
-            for (var x = 0; x < _gridArray.GetLength(0); x++)
+        public void UpdateDebug()
+        {
+            if (!ShowDebug)
             {
-                for (var y = 0; y < _gridArray.GetLength(1); y++)
+                return;
+            }
+
+            int width = _gridArray.GetLength(0);
+            int height = _gridArray.GetLength(1);
+
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
                 {
-                    debugTextArray[x, y] = TextExtensions.CreateWorldTextTMP(
-                        _gridArray[x, y]?.ToString(), Color.white, null,
-                        GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 5);
-                    Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
-                    Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
+                    Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white);
+                    Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white);
                 }
             }
 
-            Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
-            Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
-
-            OnGridObjectChanged += (pos) =>
-            {
-                debugTextArray[pos.x, pos.y].text = _gridArray[pos.x, pos.y]?.ToString();
-            };
+            Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white);
+            Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white);
         }
 
-        public Vector3 GetWorldPosition(int x, int y)
+        public Vector3 GetLocalPosition(int x, int y)
         {
             return new Vector3(x, y) * CellSize + _originPosition;
         }
 
+        public Vector3 GetWorldPosition(int x, int y)
+        {
+            return _transform.TransformPoint(GetLocalPosition(x, y));
+        }
+
         public void GetXY(Vector3 worldPosition, out int x, out int y)
         {
-            x = Mathf.FloorToInt((worldPosition - _originPosition).x / CellSize);
-            y = Mathf.FloorToInt((worldPosition - _originPosition).y / CellSize);
+            Vector2Int position = _transform.InverseTransformPoint((worldPosition - _originPosition).Divide(CellSize)).ToVector2IntFloor();
+            x = position.x;
+            y = position.y;
         }
 
         public void SetGridObject(int x, int y, T value)
@@ -111,6 +126,24 @@ namespace OctanGames.Map
         {
             GetXY(worldPosition, out int x, out int y);
             return GetGridObject(x, y);
+        }
+
+        private void AddDebugText(int width, int height, float cellSize)
+        {
+            for (var x = 0; x < _gridArray.GetLength(0); x++)
+            {
+                for (var y = 0; y < _gridArray.GetLength(1); y++)
+                {
+                    _debugTextArray[x, y] = TextExtensions.CreateWorldTextTMP(
+                        _gridArray[x, y]?.ToString(), Color.white, _transform,
+                        GetLocalPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 5);
+                }
+            }
+
+            OnGridObjectChanged += (pos) =>
+            {
+                _debugTextArray[pos.x, pos.y].text = _gridArray[pos.x, pos.y]?.ToString();
+            };
         }
     }
 }

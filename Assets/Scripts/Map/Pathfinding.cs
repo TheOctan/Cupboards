@@ -7,6 +7,8 @@ namespace OctanGames.Map
 {
     public class Pathfinding
     {
+        private Transform _transform;
+
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
@@ -14,10 +16,16 @@ namespace OctanGames.Map
         private List<PathNode> _closeList;
         public CellsGrid<PathNode> CellsGrid { get; }
 
-        public Pathfinding(int width, int height)
+        public Pathfinding(Transform transform, int width, int height, float tileSize)
         {
-            CellsGrid = new CellsGrid<PathNode>(width, height, 1f, Vector3.zero,
+            _transform = transform;
+            CellsGrid = new CellsGrid<PathNode>(transform, width, height, tileSize, Vector3.zero,
                 (grid, x, y) => new PathNode(grid, x, y));
+        }
+
+        public void UpdateDebug()
+        {
+            CellsGrid.UpdateDebug();
         }
 
         public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
@@ -86,6 +94,46 @@ namespace OctanGames.Map
             return null;
         }
 
+        public void BakePoints(Vector2Int[] points)
+        {
+            FillObstacles(false);
+            foreach (Vector2Int point in points)
+            {
+                CellsGrid.GetGridObject(point.x - 1, point.y - 1).IsWalkable = true;
+            }
+        }
+
+        public void BakeObstacles(Vector2Int[] obstacles)
+        {
+            foreach (Vector2Int obstacle in obstacles)
+            {
+                CellsGrid.GetGridObject(obstacle.x, obstacle.y).IsWalkable = false;
+            }
+        }
+
+        private void FillObstacles(bool value)
+        {
+            for (var x = 0; x < CellsGrid.Width; x++)
+            {
+                for (var y = 0; y < CellsGrid.Height; y++)
+                {
+                    CellsGrid.GetGridObject(x, y).IsWalkable = value;
+                }
+            }
+        }
+
+        private void InverseObstacles(bool value)
+        {
+            for (var x = 0; x < CellsGrid.Width; x++)
+            {
+                for (var y = 0; y < CellsGrid.Height; y++)
+                {
+                    bool isWalkable = CellsGrid.GetGridObject(x, y).IsWalkable;
+                    CellsGrid.GetGridObject(x, y).IsWalkable = !isWalkable;
+                }
+            }
+        }
+
         private List<PathNode> GetNeighbourList(PathNode currentNode)
         {
             var neighbourList = new List<PathNode>();
@@ -94,7 +142,8 @@ namespace OctanGames.Map
             {
                 for (int y = -1; y <= 1; y++)
                 {
-                    if (x == 0 && y == 0)
+                    if ((x == 0 && y == 0)
+                        || (x != 0 && y != 0))
                     {
                         continue;
                     }
@@ -103,7 +152,7 @@ namespace OctanGames.Map
                     int neighbourY = currentNode.Y + y;
 
                     if (neighbourX >= 0 && neighbourX < CellsGrid.Width
-                        && neighbourY >= 0 && neighbourY < CellsGrid.Height)
+                                        && neighbourY >= 0 && neighbourY < CellsGrid.Height)
                     {
                         neighbourList.Add(GetNode(neighbourX, neighbourY));
                     }

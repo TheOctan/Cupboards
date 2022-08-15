@@ -4,7 +4,7 @@ namespace OctanGames.Map
 {
     public class PathNode
     {
-        private CellsGrid<PathNode> _cellsGrid;
+        private readonly CellsGrid<PathNode> _cellsGrid;
         public int X => Position.x;
         public int Y => Position.y;
 
@@ -12,7 +12,17 @@ namespace OctanGames.Map
         public int GCost { get; set; }
         public int HCost { get; set; }
         public int FCost { get; private set; }
-        public bool IsWalkable { get; set; }
+        public bool IsWalkable
+        {
+            get => _isWalkable;
+            set
+            {
+                _isWalkable = value;
+                _cellsGrid.SetDebugText(X, Y, _isWalkable ? Color.green : Color.red);
+            }
+        }
+
+        private bool _isWalkable = true;
 
         public PathNode PrevNode { get; set; }
 
@@ -20,7 +30,6 @@ namespace OctanGames.Map
         {
             _cellsGrid = cellsGrid;
             Position = new Vector2Int(x, y);
-            IsWalkable = true;
         }
 
         public void CalculateFCost()
