@@ -156,6 +156,7 @@ namespace OctanGames
         private void MoveChip(List<PathNode> path)
         {
             Sequence sequence = DOTween.Sequence();
+            _pathfinding.UnBakeObstacle(_currentSelectedChip.Position);
             foreach (PathNode pathNode in path)
             {
                 sequence.Append(_currentSelectedChip.transform
@@ -166,6 +167,7 @@ namespace OctanGames
             sequence.OnComplete(() =>
             {
                 _currentSelectedChip.UpdateCurrentPosition(path[path.Count - 1].Position);
+                _pathfinding.BakeObstacle(_currentSelectedChip.Position);
                 ResetCurrentSelectedChip();
             });
         }

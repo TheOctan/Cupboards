@@ -122,6 +122,16 @@ namespace OctanGames.Map
             }
         }
 
+        public void BakeObstacle(Vector2Int obstacle)
+        {
+            CellsGrid.GetGridObject(obstacle.x, obstacle.y).IsWalkable = false;
+        }
+
+        public void UnBakeObstacle(Vector2Int obstacle)
+        {
+            CellsGrid.GetGridObject(obstacle.x, obstacle.y).IsWalkable = true;
+        }
+
         public void BakeConnections(MapData mapData)
         {
             foreach (Connection connection in mapData.Connections)
