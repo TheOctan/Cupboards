@@ -5,7 +5,7 @@ using UnityExtensions.Math;
 namespace OctanGames.Map
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class Tile : MonoBehaviour, ITile
+    public class Chip : MonoBehaviour, ITile
     {
         private SpriteRenderer _spriteRenderer;
         

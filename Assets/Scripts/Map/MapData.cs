@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace OctanGames.Map
 {
@@ -17,7 +16,7 @@ namespace OctanGames.Map
 
     public class Connection
     {
-        public int StartPoint;
-        public int EndPoint;
+        public int StartPointNumber;
+        public int EndPointNumber;
     }
 }

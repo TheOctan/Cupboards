@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityExtensions.Collections.Generic;
 using UnityExtensions.Math;
@@ -111,6 +112,42 @@ namespace OctanGames.Map
             }
         }
 
+        public void BakeConnections(MapData mapData)
+        {
+            foreach (Connection connection in mapData.Connections)
+            {
+                Vector2Int startPosition = mapData.Points[(connection.StartPointNumber - 1)] - Vector2Int.one;
+                Vector2Int endPosition = mapData.Points[(connection.EndPointNumber - 1)] - Vector2Int.one;
+                Vector2Int dir = endPosition - startPosition;
+
+                if (dir.x > 0)
+                {
+                    GetNode(startPosition.x, startPosition.y).IsRightConnected = true;
+                    GetNode(endPosition.x, endPosition.y).IsLeftConnected = true;
+                }
+                else if (dir.x < 0)
+                {
+                    GetNode(startPosition.x, startPosition.y).IsLeftConnected = true;
+                    GetNode(endPosition.x, endPosition.y).IsRightConnected = true;
+                }
+                else if (dir.y > 0)
+                {
+                    GetNode(startPosition.x, startPosition.y).IsUpConnected = true;
+                    GetNode(endPosition.x, endPosition.y).IsDownConnected = true;
+                }
+                else if (dir.y < 0)
+                {
+                    GetNode(startPosition.x, startPosition.y).IsDownConnected = true;
+                    GetNode(endPosition.x, endPosition.y).IsUpConnected = true;
+                }
+            }
+        }
+
+        public IReadOnlyNode GetReadOnlyNode(int x, int y)
+        {
+            return CellsGrid.GetGridObject(x, y);
+        }
+
         private void FillObstacles(bool value)
         {
             for (var x = 0; x < CellsGrid.Width; x++)
@@ -138,25 +175,24 @@ namespace OctanGames.Map
         {
             var neighbourList = new List<PathNode>();
 
-            for (int x = -1; x <= 1; x++)
+            int x = currentNode.X;
+            int y = currentNode.Y;
+
+            if (x - 1 >= 0 && currentNode.IsLeftConnected)
             {
-                for (int y = -1; y <= 1; y++)
-                {
-                    if ((x == 0 && y == 0)
-                        || (x != 0 && y != 0))
-                    {
-                        continue;
-                    }
-
-                    int neighbourX = currentNode.X + x;
-                    int neighbourY = currentNode.Y + y;
-
-                    if (neighbourX >= 0 && neighbourX < CellsGrid.Width
-                                        && neighbourY >= 0 && neighbourY < CellsGrid.Height)
-                    {
-                        neighbourList.Add(GetNode(neighbourX, neighbourY));
-                    }
-                }
+                neighbourList.Add(GetNode(x - 1, y));
+            }
+            if (x + 1 < CellsGrid.Width && currentNode.IsRightConnected)
+            {
+                neighbourList.Add(GetNode(x + 1, y));
+            }
+            if (y - 1 >= 0 && currentNode.IsDownConnected)
+            {
+                neighbourList.Add(GetNode(x, y - 1));
+            }
+            if (y + 1 < CellsGrid.Width && currentNode.IsUpConnected)
+            {
+                neighbourList.Add(GetNode(x, y + 1));
             }
 
             return neighbourList;

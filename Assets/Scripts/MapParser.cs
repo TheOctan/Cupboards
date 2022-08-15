@@ -65,8 +65,8 @@ namespace OctanGames
                             int endPoint = int.Parse(coordinates[1]);
                             connections[i] = new Connection()
                             {
-                                StartPoint = startPoint,
-                                EndPoint = endPoint
+                                StartPointNumber = startPoint,
+                                EndPointNumber = endPoint
                             };
                         }
 
