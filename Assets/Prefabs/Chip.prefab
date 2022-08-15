@@ -95,3 +95,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9fa8693cdb440bae30d15902b64f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interactable: 1
+  _colorSelectionDelta: 0.25

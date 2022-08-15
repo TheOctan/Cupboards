@@ -29,8 +29,18 @@ namespace OctanGames.Map
             CellsGrid.UpdateDebug();
         }
 
+        // public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition)
+        // {
+        //     
+        // }
+
         public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
         {
+            if (startX == endX && startY == endY)
+            {
+                return null;
+            }
+
             PathNode startNode = GetNode(startX, startY);
             PathNode endNode = GetNode(endX, endY);
 
