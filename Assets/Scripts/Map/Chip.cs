@@ -3,15 +3,18 @@ using UnityEngine;
 
 namespace OctanGames.Map
 {
-    [RequireComponent(typeof(SpriteRenderer))]
     public class Chip : MonoBehaviour
     {
         public event Action OnCompleted;
 
-        [SerializeField] private bool _interactable = true;
+        [SerializeField] private SpriteRenderer _chip;
+        [SerializeField] private SpriteRenderer _shadow;
+
+        [Header("Properties")] [SerializeField]
+        private bool _interactable = true;
+
         [SerializeField] private float _colorSelectionDelta = 0.25f;
 
-        private SpriteRenderer _spriteRenderer;
         private Color _startColor;
         private Vector2Int _endPosition;
 
@@ -20,11 +23,6 @@ namespace OctanGames.Map
         public bool Interactable => _interactable;
         public int X => Position.x;
         public int Y => Position.y;
-
-        private void Awake()
-        {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-        }
 
         public void SetEndPosition(Vector2Int endPosition)
         {
@@ -49,7 +47,8 @@ namespace OctanGames.Map
 
         public void SetColor(Color color)
         {
-            _spriteRenderer.color = color;
+            _chip.color = color;
+            _shadow.color = color - new Color(_colorSelectionDelta, _colorSelectionDelta, _colorSelectionDelta, 0);
             _startColor = color;
         }
 
@@ -59,7 +58,8 @@ namespace OctanGames.Map
             {
                 return;
             }
-            _spriteRenderer.color = 
+
+            _chip.color =
                 _startColor + new Color(_colorSelectionDelta, _colorSelectionDelta, _colorSelectionDelta);
         }
 
@@ -69,12 +69,15 @@ namespace OctanGames.Map
             {
                 return;
             }
-            _spriteRenderer.color = _startColor;
+
+            _chip.color = _startColor;
         }
 
         private void Disable()
         {
-            _spriteRenderer.color = Color.gray;
+            _chip.color = _startColor - new Color(_colorSelectionDelta * 1.5f, 
+                _colorSelectionDelta * 1.5f,
+                _colorSelectionDelta * 1.5f, 0);
         }
     }
 }
