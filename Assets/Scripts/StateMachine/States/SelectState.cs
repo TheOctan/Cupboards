@@ -15,6 +15,7 @@ namespace OctanGames.StateMachine.States
 
         public override void EnterState()
         {
+            Debug.Log(nameof(SelectState));
         }
 
         public override void UpdateState()

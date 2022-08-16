@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace OctanGames.StateMachine.States
 {
@@ -20,6 +21,12 @@ namespace OctanGames.StateMachine.States
 
         protected void SwitchState(T newState)
         {
+            _stateMachine.SwitchState(newState);
+        }
+
+        protected async void SwitchStateAsync(T newState)
+        {
+            await Task.Yield();
             _stateMachine.SwitchState(newState);
         }
     }

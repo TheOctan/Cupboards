@@ -12,6 +12,7 @@ namespace OctanGames.StateMachine.States
 
         public override void EnterState()
         {
+            Debug.Log(nameof(DeselectState));
             GameContext.ResetCurrentSelectedChip();
         }
 

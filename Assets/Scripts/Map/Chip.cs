@@ -6,7 +6,7 @@ namespace OctanGames.Map
     public class Chip : MonoBehaviour
     {
         [SerializeField] private bool _interactable = true;
-        [SerializeField] private float _colorSelectionDelta = 0.5f;
+        [SerializeField] private float _colorSelectionDelta = 0.25f;
 
         private SpriteRenderer _spriteRenderer;
         private Color _startColor;
@@ -46,12 +46,21 @@ namespace OctanGames.Map
 
         public void Select()
         {
-            _spriteRenderer.color = _startColor + Color.white * _colorSelectionDelta;
+            if (!Interactable)
+            {
+                return;
+            }
+            _spriteRenderer.color = 
+                _startColor + new Color(_colorSelectionDelta, _colorSelectionDelta, _colorSelectionDelta);
         }
 
         public void UnSelect()
         {
-            _spriteRenderer.color = _startColor - Color.white * _colorSelectionDelta;
+            if (!Interactable)
+            {
+                return;
+            }
+            _spriteRenderer.color = _startColor;
         }
 
         private void Disable()

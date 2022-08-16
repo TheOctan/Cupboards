@@ -15,20 +15,27 @@ namespace OctanGames.StateMachine.States
 
         public override void EnterState()
         {
+            Debug.Log(nameof(FindPathState));
+            
             Vector2Int startPosition = GameContext.CurrentSelectedChip.Position;
             Vector2Int endPosition = GameContext.LastSelectedPosition;
 
             List<PathNode> path = GameContext.Pathfinding.FindPath(
                 startPosition.x, startPosition.y, endPosition.x, endPosition.y);
 
-            if (path == null)
+            if (path != null)
             {
-                SwitchState(GameState.Deselect);
+                MoveChip(path);
+            }
+            else
+            {
+                SwitchStateAsync(GameState.Deselect);
             }
         }
 
         public override void UpdateState()
         {
+            
         }
 
         public override void ExitState()
