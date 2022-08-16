@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace OctanGames.Map
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class Chip : MonoBehaviour
     {
+        public event Action OnCompleted;
+
         [SerializeField] private bool _interactable = true;
         [SerializeField] private float _colorSelectionDelta = 0.25f;
 
@@ -40,6 +43,7 @@ namespace OctanGames.Map
             {
                 _interactable = false;
                 Disable();
+                OnCompleted?.Invoke();
             }
         }
 

@@ -5,6 +5,7 @@ using UnityExtensions.Math;
 using OctanGames.Map;
 using OctanGames.Map.Node;
 using OctanGames.StateMachine;
+using UnityEngine.Events;
 
 namespace OctanGames
 {
@@ -26,13 +27,19 @@ namespace OctanGames
         [SerializeField] private float _chipMovementDuration = 0.1f;
         [SerializeField] private MapType _mapType = MapType.StartPositions;
         [SerializeField] private bool _showDebug;
+        
+        [Header("Events")]
+        [SerializeField] private UnityEvent _onWin;
 
         private readonly List<Chip> _chips = new List<Chip>();
         private MapData _mapData;
         private Pathfinding _pathfinding;
         private GameContext _gameContext;
         private GameStateMachine _stateMachine;
+
         private Vector2Int _size;
+        private int _totalChipsCount;
+        private int _completedChipCount;
 
         private void Start()
         {
@@ -40,6 +47,7 @@ namespace OctanGames
             _size = new Vector2Int(
                 _mapData.Points.Max(p => p.x),
                 _mapData.Points.Max(p => p.y));
+            _totalChipsCount = _mapData.CountChips;
 
             _pathfinding = new Pathfinding(transform, _size.x, _size.y, _tileSize, _showDebug);
 
@@ -86,6 +94,7 @@ namespace OctanGames
             for (var i = 0; i < _mapData.CountChips; i++)
             {
                 Chip chip = Instantiate(_chipPrefab, transform, false);
+                chip.OnCompleted += OnChipCompleted;
 
                 int positionIndex = _mapData.StartPositions[i] - 1;
                 int winPositionIndex = _mapData.WinPositions[i] - 1;
@@ -112,6 +121,15 @@ namespace OctanGames
                 chip.SetColor(_tileOptions.Colors[i]);
 
                 _chips.Add(chip);
+            }
+        }
+
+        private void OnChipCompleted()
+        {
+            _completedChipCount++;
+            if (_completedChipCount == _totalChipsCount)
+            {
+                _onWin.Invoke();
             }
         }
     }
