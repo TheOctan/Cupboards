@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.octangames.unity-extensions": {
+      "version": "https://github.com/TheOctan/UnityExtensions.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5d174864ce147b355d5ca0af255e8b4a73b9b83c"
+    },
     "com.unity.2d.animation": {
       "version": "5.0.9",
       "depth": 0,
@@ -142,6 +149,15 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.recorder": {
+      "version": "2.5.7",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.services.core": {
