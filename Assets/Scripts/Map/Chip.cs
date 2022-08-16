@@ -28,6 +28,11 @@ namespace OctanGames.Map
             _endPosition = endPosition;
         }
 
+        public void SetStartPosition(Vector2Int startPosition)
+        {
+            Position = startPosition;
+        }
+
         public void UpdateCurrentPosition(Vector2Int currentPosition)
         {
             Position = currentPosition;

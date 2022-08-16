@@ -10,7 +10,7 @@ namespace OctanGames.Map
     {
         public event Action<Vector2Int> OnGridObjectChanged;
 
-        private Transform _transform;
+        private readonly Transform _transform;
 
         private readonly Vector3 _originPosition;
         private readonly T[,] _gridArray;
@@ -22,11 +22,12 @@ namespace OctanGames.Map
         public float CellSize { get; }
 
         public CellsGrid(Transform transform, int width, int height, float cellSize,
-            Vector3 originPosition, Func<CellsGrid<T>, int, int, T> createGridObject)
+            Vector3 originPosition, Func<CellsGrid<T>, int, int, T> createGridObject, bool showDebug)
         {
             Width = width;
             Height = height;
             CellSize = cellSize;
+            ShowDebug = showDebug;
             _originPosition = originPosition;
             _transform = transform;
 
