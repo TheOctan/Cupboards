@@ -10,6 +10,7 @@
         public GameStateMachine(GameContext gameContext)
         {
             _gameStateFactory = new GameStateFactory(this, gameContext);
+            _gameStateFactory.RegisterStates();
         }
     }
 }

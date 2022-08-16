@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using OctanGames.Map.Node;
 using UnityEngine;
 using UnityExtensions.Collections.Generic;
 using UnityExtensions.Math;
@@ -36,7 +37,7 @@ namespace OctanGames.Map
 
         public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
         {
-            if (startX == endX && startY == endY)
+            if (!IsValidPositions(startX, startY, endX, endY))
             {
                 return null;
             }
@@ -103,6 +104,15 @@ namespace OctanGames.Map
             }
 
             return null;
+        }
+
+        public bool IsValidPositions(int startX, int startY, int endX, int endY)
+        {
+            return (startX != endX || startY != endY) && 
+                   startX >= 0 && startX < CellsGrid.Width && 
+                   startY >= 0 && startY < CellsGrid.Height &&
+                   endX >= 0 && endX < CellsGrid.Width && 
+                   endY >= 0 && endY < CellsGrid.Height;
         }
 
         public void BakePoints(Vector2Int[] points)

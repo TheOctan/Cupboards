@@ -1,35 +1,7 @@
 ﻿using UnityEngine;
 
-namespace OctanGames.Map
+namespace OctanGames.Map.Node
 {
-    public struct Connections
-    {
-        public int U;
-        public int R;
-        public int D;
-        public int L;
-
-        public Connections(int u, int r, int d, int l)
-        {
-            L = l;
-            D = d;
-            R = r;
-            U = u;
-        }
-    }
-
-    public interface IReadOnlyNode
-    {
-        int X { get; }
-        int Y { get; }
-        Vector2Int Position { get; }
-        bool IsLeftConnected { get; }
-        bool IsRightConnected { get; }
-        bool IsUpConnected { get; }
-        bool IsDownConnected { get; }
-        public Connections Connections { get; }
-    }
-
     public class PathNode : IReadOnlyNode
     {
         private readonly CellsGrid<PathNode> _cellsGrid;
@@ -69,6 +41,30 @@ namespace OctanGames.Map
         {
             _cellsGrid = cellsGrid;
             Position = new Vector2Int(x, y);
+        }
+
+        public int ConnectionToIndex()
+        {
+            switch (Connections)
+            {
+                case { U: 1, R: 1, D: 1, L: 1 }: return 5;
+                case { U: 1, R: 1, D: 1, L: 0 }: return 4;
+                case { U: 1, R: 1, D: 0, L: 1 }: return 9;
+                case { U: 1, R: 1, D: 0, L: 0 }: return 8;
+                case { U: 1, R: 0, D: 1, L: 1 }: return 6;
+                case { U: 1, R: 0, D: 1, L: 0 }: return 7;
+                case { U: 1, R: 0, D: 0, L: 1 }: return 10;
+                case { U: 1, R: 0, D: 0, L: 0 }: return 11;
+                case { U: 0, R: 1, D: 1, L: 1 }: return 1;
+                case { U: 0, R: 1, D: 1, L: 0 }: return 0;
+                case { U: 0, R: 1, D: 0, L: 1 }: return 13;
+                case { U: 0, R: 1, D: 0, L: 0 }: return 12;
+                case { U: 0, R: 0, D: 1, L: 1 }: return 2;
+                case { U: 0, R: 0, D: 1, L: 0 }: return 3;
+                case { U: 0, R: 0, D: 0, L: 1 }: return 14;
+                case { U: 0, R: 0, D: 0, L: 0 }: return 15;
+                default: return 15;
+            }
         }
 
         public void CalculateFCost()
