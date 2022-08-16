@@ -32,7 +32,6 @@ namespace OctanGames
         private Pathfinding _pathfinding;
         private GameContext _gameContext;
         private GameStateMachine _stateMachine;
-
         private Vector2Int _size;
 
         private void Start()
@@ -101,7 +100,7 @@ namespace OctanGames
                         chip.transform.localPosition = (startPosition.TileCenter() * _tileSize).ToVertical();
                         break;
                     case MapType.WinPositions:
-                        chip.SetStartPosition(startPosition);
+                        chip.SetStartPosition(winPosition);
                         chip.transform.localPosition = (winPosition.TileCenter() * _tileSize).ToVertical();
                         break;
                     default:

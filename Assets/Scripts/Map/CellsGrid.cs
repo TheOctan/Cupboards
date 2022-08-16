@@ -50,6 +50,10 @@ namespace OctanGames.Map
 
         public void SetDebugText(int x, int y, Color color)
         {
+            if (!ShowDebug)
+            {
+                return;
+            }
             _debugTextArray[x, y].color = color;
         }
 
