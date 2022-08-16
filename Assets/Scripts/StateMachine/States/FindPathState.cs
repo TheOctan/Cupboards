@@ -49,7 +49,7 @@ namespace OctanGames.StateMachine.States
             foreach (PathNode pathNode in path)
             {
                 sequence.Append(GameContext.CurrentSelectedChip.transform
-                    .DOMove((pathNode.Position.TileCenter() * GameContext.TileSize).ToVertical(), GameContext.ChipMovementDuration)
+                    .DOLocalMove((pathNode.Position.TileCenter() * GameContext.TileSize).ToVertical(), GameContext.ChipMovementDuration)
                     .SetEase(Ease.InOutSine));
             }
 

@@ -87,12 +87,15 @@ namespace OctanGames.Map
 
         public Vector3 GetWorldPosition(int x, int y)
         {
-            return _transform.TransformPoint(GetLocalPosition(x, y));
+            Vector3 localPosition = GetLocalPosition(x, y);
+            Vector3 globalPosition = _transform.TransformPoint(localPosition);
+            return globalPosition;
         }
 
         public void GetXY(Vector3 worldPosition, out int x, out int y)
         {
-            Vector2Int position = _transform.InverseTransformPoint((worldPosition - _originPosition).Divide(CellSize)).ToVector2IntFloor();
+            Vector3 localPosition = _transform.InverseTransformPoint(worldPosition);
+            Vector2Int position = (localPosition - _originPosition).Divide(CellSize).ToVector2IntFloor();
             x = position.x;
             y = position.y;
         }
