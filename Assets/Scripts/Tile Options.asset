@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0843be3280ff4cb2b145efa61698058f, type: 3}
+  m_Name: Tile Options
+  m_EditorClassIdentifier: 
+  _colors:
+  - {r: 0.9098039, g: 0.25490198, b: 0.09411765, a: 1}
+  - {r: 1, g: 0.62352943, b: 0.2627451, a: 1}
+  - {r: 0.9843137, g: 0.77254903, b: 0.19215687, a: 1}
+  - {r: 0.29803923, g: 0.81960785, b: 0.21568628, a: 1}
+  - {r: 0, g: 0.38431373, b: 0.4, a: 1}
+  - {r: 0, g: 0.65882355, b: 1, a: 1}
+  - {r: 0.105882354, g: 0.078431375, b: 0.39215687, a: 1}
+  - {r: 0.37254903, g: 0.15294118, b: 0.8039216, a: 1}
+  - {r: 1, g: 0.62352943, b: 0.9529412, a: 1}
+  _defaultColor: {r: 0.43529412, g: 0.11764706, b: 0.31764707, a: 1}
+  _tileSprites:
+  - {fileID: -5036768933412193197, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: 4492250008666643088, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: 4715246445244994725, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: 8146063069670790002, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: 5108680614897391701, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -1916003789631259022, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: 6264658066532892760, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -5722566996544379293, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -4609450331371144818, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -6455912676379255080, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -9118342884330952504, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -976612157152108919, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -7588414523323295091, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -7078829706002498170, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: -2373416391644986774, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
+  - {fileID: 4578803658420844621, guid: 0e48d99099522234ebd8ff1f4406818c, type: 3}
