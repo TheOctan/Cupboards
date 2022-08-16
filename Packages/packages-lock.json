@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.octangames.unity-extensions": {
+      "version": "https://github.com/TheOctan/UnityExtensions.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "fed9247647ba01e42726e7a5e2a86e48b7b96084"
+    },
     "com.unity.2d.animation": {
       "version": "5.0.9",
       "depth": 0,

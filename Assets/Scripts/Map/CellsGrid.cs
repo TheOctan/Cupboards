@@ -10,7 +10,7 @@ namespace OctanGames.Map
     {
         public event Action<Vector2Int> OnGridObjectChanged;
 
-        private Transform _transform;
+        private readonly Transform _transform;
 
         private readonly Vector3 _originPosition;
         private readonly T[,] _gridArray;
@@ -22,11 +22,12 @@ namespace OctanGames.Map
         public float CellSize { get; }
 
         public CellsGrid(Transform transform, int width, int height, float cellSize,
-            Vector3 originPosition, Func<CellsGrid<T>, int, int, T> createGridObject)
+            Vector3 originPosition, Func<CellsGrid<T>, int, int, T> createGridObject, bool showDebug)
         {
             Width = width;
             Height = height;
             CellSize = cellSize;
+            ShowDebug = showDebug;
             _originPosition = originPosition;
             _transform = transform;
 
@@ -49,6 +50,10 @@ namespace OctanGames.Map
 
         public void SetDebugText(int x, int y, Color color)
         {
+            if (!ShowDebug)
+            {
+                return;
+            }
             _debugTextArray[x, y].color = color;
         }
 
@@ -82,12 +87,15 @@ namespace OctanGames.Map
 
         public Vector3 GetWorldPosition(int x, int y)
         {
-            return _transform.TransformPoint(GetLocalPosition(x, y));
+            Vector3 localPosition = GetLocalPosition(x, y);
+            Vector3 globalPosition = _transform.TransformPoint(localPosition);
+            return globalPosition;
         }
 
         public void GetXY(Vector3 worldPosition, out int x, out int y)
         {
-            Vector2Int position = _transform.InverseTransformPoint((worldPosition - _originPosition).Divide(CellSize)).ToVector2IntFloor();
+            Vector3 localPosition = _transform.InverseTransformPoint(worldPosition);
+            Vector2Int position = (localPosition - _originPosition).Divide(CellSize).ToVector2IntFloor();
             x = position.x;
             y = position.y;
         }

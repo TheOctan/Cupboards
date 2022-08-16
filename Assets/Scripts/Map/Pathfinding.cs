@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using OctanGames.Map.Node;
 using UnityEngine;
 using UnityExtensions.Collections.Generic;
@@ -18,22 +17,17 @@ namespace OctanGames.Map
         private List<PathNode> _closeList;
         public CellsGrid<PathNode> CellsGrid { get; }
 
-        public Pathfinding(Transform transform, int width, int height, float tileSize)
+        public Pathfinding(Transform transform, int width, int height, float tileSize, bool showDebug = false)
         {
             _transform = transform;
             CellsGrid = new CellsGrid<PathNode>(transform, width, height, tileSize, Vector3.zero,
-                (grid, x, y) => new PathNode(grid, x, y));
+                (grid, x, y) => new PathNode(grid, x, y), showDebug);
         }
 
         public void UpdateDebug()
         {
             CellsGrid.UpdateDebug();
         }
-
-        // public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition)
-        // {
-        //     
-        // }
 
         public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
         {

@@ -1,14 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace OctanGames.Map
 {
-    [RequireComponent(typeof(SpriteRenderer))]
     public class Chip : MonoBehaviour
     {
-        [SerializeField] private bool _interactable = true;
+        public event Action OnCompleted;
+
+        [SerializeField] private SpriteRenderer _chip;
+        [SerializeField] private SpriteRenderer _shadow;
+
+        [Header("Properties")] [SerializeField]
+        private bool _interactable = true;
+
         [SerializeField] private float _colorSelectionDelta = 0.25f;
 
-        private SpriteRenderer _spriteRenderer;
         private Color _startColor;
         private Vector2Int _endPosition;
 
@@ -18,14 +24,14 @@ namespace OctanGames.Map
         public int X => Position.x;
         public int Y => Position.y;
 
-        private void Awake()
-        {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-
         public void SetEndPosition(Vector2Int endPosition)
         {
             _endPosition = endPosition;
+        }
+
+        public void SetStartPosition(Vector2Int startPosition)
+        {
+            Position = startPosition;
         }
 
         public void UpdateCurrentPosition(Vector2Int currentPosition)
@@ -35,12 +41,14 @@ namespace OctanGames.Map
             {
                 _interactable = false;
                 Disable();
+                OnCompleted?.Invoke();
             }
         }
 
         public void SetColor(Color color)
         {
-            _spriteRenderer.color = color;
+            _chip.color = color;
+            _shadow.color = color - new Color(_colorSelectionDelta, _colorSelectionDelta, _colorSelectionDelta, 0);
             _startColor = color;
         }
 
@@ -50,7 +58,8 @@ namespace OctanGames.Map
             {
                 return;
             }
-            _spriteRenderer.color = 
+
+            _chip.color =
                 _startColor + new Color(_colorSelectionDelta, _colorSelectionDelta, _colorSelectionDelta);
         }
 
@@ -60,12 +69,15 @@ namespace OctanGames.Map
             {
                 return;
             }
-            _spriteRenderer.color = _startColor;
+
+            _chip.color = _startColor;
         }
 
         private void Disable()
         {
-            _spriteRenderer.color = Color.gray;
+            _chip.color = _startColor - new Color(_colorSelectionDelta * 1.5f, 
+                _colorSelectionDelta * 1.5f,
+                _colorSelectionDelta * 1.5f, 0);
         }
     }
 }
